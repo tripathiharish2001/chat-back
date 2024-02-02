@@ -1,13 +1,10 @@
-// const express = require("express");
-// const dotenv = require("dotenv");
-// const mongoose = require("mongoose");
-// const cors = require("cors");
 const express = require("express");
 const dotenv = require("dotenv");
 const { default: mongoose } = require("mongoose");
 const app = express();
 const cors = require("cors");
 const { notFound, errorHandler } = require("./Middlewares/errorMiddleware");
+var path = require("path");
 
 // routes
 const userRoutes = require("./Routes/userRoutes");
@@ -23,6 +20,8 @@ app.use(
 dotenv.config();
 
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, "build")));
 
 const connectDB = async () => {
   try {
@@ -52,19 +51,15 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   socket.on("setup", (user) => {
-    // ye kaise kaam kiya?
     socket.join(user._id);
     socket.emit("connected");
-    // console.log("setup");
   });
 
   socket.on("join chat", (room) => {
     console.log("join room");
-    // socket.join(room);
-    // console.log("ye join room mei hai ");
-    // socket.emit("connected");
   });
 
+  // temp
   socket.on("newMessage", (newMessageStatus) => {
     var chat = newMessageStatus?.chat;
     console.log("inside send_message");
