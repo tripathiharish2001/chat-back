@@ -43,6 +43,7 @@ const server = app.listen(PORT, () => {
   console.log("Listening to server......");
 });
 
+// socket
 const io = new Server(server, {
   cors: {
     origin: "*",
