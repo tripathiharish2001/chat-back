@@ -71,11 +71,7 @@ const registerController = expressAsyncHandler(async (req, res) => {
   }
 });
 
-// using mongo expressions
-// fetches all the users that are currently registered to our app
 const fetchAllUsersController = expressAsyncHandler(async (req, res) => {
-  //console.log("Now in fectch controller fn");
-  // making small query
   const keyword = req.query.search
     ? {
         $or: [

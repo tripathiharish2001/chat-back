@@ -26,10 +26,7 @@ app.use(express.static(path.join(__dirname, "build")));
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI, {});
-    console.log("Server connected to DB");
-  } catch (err) {
-    console.log("Server not connected to DB ", err);
-  }
+  } catch (err) {}
 };
 connectDB();
 
@@ -43,7 +40,6 @@ const server = app.listen(PORT, () => {
   console.log("Listening to server......");
 });
 
-// socket
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -56,25 +52,20 @@ io.on("connection", (socket) => {
     socket.emit("connected");
   });
 
-  socket.on("join chat", (room) => {
-    console.log("join room");
-  });
+  socket.on("join chat", (room) => {});
 
   // temp
   socket.on("newMessage", (newMessageStatus) => {
     var chat = newMessageStatus?.chat;
-    console.log("inside send_message");
     if (!chat || !chat?.users) {
-      return console.log("chats users not defined");
+      return alert("chats users not defined");
     }
 
     io.emit("refreshSidebar");
 
     chat.users.forEach((user) => {
-      console.log("In newMessage");
       if (user._id === newMessageStatus.sender._id) return;
       socket.in(user._id).emit("messageReceived", newMessageStatus);
-      console.log(user._id);
     });
   });
 });
